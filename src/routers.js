@@ -4,9 +4,11 @@ const { celebrate, Segments, Joi } = require('celebrate');
 const UserController = require('./controllers/UserController');
 const SubjectController = require('./controllers/SubjectController');
 const QuestionController = require('./controllers/QuestionController');
-
+const SessionController = require('./controllers/SessionController')
 
 const routers = express.Router(); 
+
+routers.post('/sessions' , SessionController.create )
 
 routers.get('/users', UserController.index);
 
@@ -43,6 +45,8 @@ routers.post('/question', celebrate({
     option_d: Joi.string().required(),
   })
 }),QuestionController.create);
+
+routers.get('/questions/:subject_id', QuestionController.show);
 
 routers.get('/questions', QuestionController.index);
 routers.delete('/question/:id', celebrate({

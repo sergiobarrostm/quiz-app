@@ -1,6 +1,21 @@
 const connection = require('../database/connection');
+const { response } = require('express');
 
 module.exports = {
+
+  async show(req,res){
+
+    const { subject_id } = req.params;
+
+    const subjectQuestions = await connection('questions')
+      .join('subjects', 'subjects.id', '=', 'questions.subject_id')
+      .select([
+        'questions.*',
+        'subjects.name'])
+      .where('subject_id', subject_id );
+    
+    return res.json(subjectQuestions);
+  },
 
   async index(req, res){
 
