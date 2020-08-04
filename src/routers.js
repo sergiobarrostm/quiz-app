@@ -12,6 +12,10 @@ routers.post('/sessions' , SessionController.create )
 
 routers.get('/users', UserController.index);
 
+routers.get('/questions/user/:user_id', QuestionController.showQuestionsByUser);
+routers.get('/questions/:subject_id', QuestionController.show);
+
+
 routers.post('/user', celebrate({
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required(),
@@ -45,8 +49,6 @@ routers.post('/question', celebrate({
     option_d: Joi.string().required(),
   })
 }),QuestionController.create);
-
-routers.get('/questions/:subject_id', QuestionController.show);
 
 routers.get('/questions', QuestionController.index);
 routers.delete('/question/:id', celebrate({

@@ -5,16 +5,33 @@ module.exports = {
 
   async show(req,res){
 
-    const { subject_id } = req.params;
+    const { subject_id }  = req.params;
 
     const subjectQuestions = await connection('questions')
-      .join('subjects', 'subjects.id', '=', 'questions.subject_id')
-      .select([
-        'questions.*',
-        'subjects.name'])
-      .where('subject_id', subject_id );
+    .where('subject_id' , subject_id)
+    .join('subjects', 'subjects.id', '=', 'questions.subject_id')
+    .select([
+      'questions.*',
+      'subjects.name'
+    ]);
     
+      if (!subjectQuestions){
+        return response.status(400).json({message: 'Questions not found'});
+      } 
+
+
     return res.json(subjectQuestions);
+  },
+
+  async showQuestionsByUser(req, res){
+    
+    const { user_id } = req.params;
+
+    const questionsByUser = await connection('questions')
+      .select('*')
+      .where('user_id' , user_id);
+
+      return res.json(questionsByUser);
   },
 
   async index(req, res){
@@ -58,7 +75,6 @@ module.exports = {
     });
 
     return res.json({ id })
-
   },
 
   async delete(req, res){
